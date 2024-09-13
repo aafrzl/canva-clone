@@ -118,6 +118,7 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  changeOpacity: (value: number) => void;
   bringForward: () => void;
   sendBackward: () => void;
   changeFillColor: (value: string) => void;
@@ -131,6 +132,7 @@ export interface Editor {
   addInverseTriangle: () => void;
   addDiamond: () => void;
   canvas: fabric.Canvas;
+  getActiveOpacity: () => number;
   getActiveStrokeDashArray: () => number[];
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;

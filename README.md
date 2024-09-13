@@ -1,4 +1,3 @@
-TODO: Implement Opacity Slider for Editor
 TODO: Implement Text Sidebar
 TODO: Implement Font Family
 TODO: Implement Font Style Tool

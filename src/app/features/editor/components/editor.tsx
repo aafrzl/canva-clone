@@ -12,6 +12,7 @@ import Toolbar from "./toolbar";
 import FillColorSidebar from "./fill-color-sidebar";
 import StrokeColorSidebar from "./stroke-color-sidebar";
 import StrokeWidthSidebar from "./stroke-width-sidebar";
+import OpacitySidebar from "./opacity-sidebar";
 
 export default function Editor() {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
@@ -36,7 +37,7 @@ export default function Editor() {
   );
 
   const onClearSelection = useCallback(() => {
-    if(selectedDependentTools.includes(activeTool)){
+    if (selectedDependentTools.includes(activeTool)) {
       setActiveTool("select");
     }
   }, [activeTool]);
@@ -95,8 +96,13 @@ export default function Editor() {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
+        <OpacitySidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
         <main className="bg-muted flex-1 overflow-auto relative flex flex-col">
-          <Toolbar 
+          <Toolbar
             editor={editor}
             activeTool={activeTool}
             onChangeActiveTool={onChangeActiveTool}
