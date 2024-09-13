@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import { isTextType } from "@/lib/utils";
 import { fabric } from "fabric";
 import { useCallback, useMemo, useState } from "react";
 import {
@@ -12,11 +13,11 @@ import {
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
+  TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
 } from "../../types";
 import { useAutoresize } from "./use-autoresize";
 import { useCanvasEvents } from "./use-canvas-events";
-import { isTextType } from "@/lib/utils";
 
 const buildEditor = ({
   canvas,
@@ -51,6 +52,14 @@ const buildEditor = ({
   };
 
   return {
+    addText: (value, options) => {
+      const object = new fabric.Textbox(value, {
+        ...TEXT_OPTIONS,
+        ...options,
+      });
+
+      addToCanvas(object);
+    },
     changeOpacity: (value: number) => {
       canvas.getActiveObjects().forEach((object) => {
         object.set({ opacity: value });

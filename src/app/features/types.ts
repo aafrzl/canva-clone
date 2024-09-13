@@ -1,4 +1,5 @@
 import { fabric } from "fabric";
+import { ITextOptions } from "fabric/fabric-impl";
 import * as material from "material-colors";
 
 export interface EditorHookProps {
@@ -58,9 +59,12 @@ export type ActiveTool =
 
 //Define shape options
 export const FILL_COLOR = "rgba(210,215,211,1)";
+export const TEXT_COLOR = "rgba(0,0,0,1)";
 export const STROKE_COLOR = "rgba(0,0,0,1)";
 export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
+export const FONT_FAMILY = "Arial";
+export const FONT_SIZE = 32;
 
 export const CIRCLE_OPTIONS = {
   radius: 150,
@@ -69,6 +73,16 @@ export const CIRCLE_OPTIONS = {
   top: 100,
   stroke: STROKE_COLOR,
   strokeWidth: STROKE_WIDTH,
+};
+
+export const TEXT_OPTIONS = {
+  type: "text",
+  left: 100,
+  top: 100,
+  fill: TEXT_COLOR,
+  fontSize: FONT_SIZE,
+  width: 600,
+  fontFamily: FONT_FAMILY,
 };
 
 export const RECTANGLE_OPTIONS = {
@@ -125,6 +139,7 @@ export interface Editor {
   changeStrokeColor: (value: string) => void;
   changeStrokeWidth: (value: number) => void;
   changeStrokeDashArray: (value: number[]) => void;
+  addText: (value: string, options?: ITextOptions) => void;
   addCircle: () => void;
   addRectangleSoft: () => void;
   addRectangle: () => void;
