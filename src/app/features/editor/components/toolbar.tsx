@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ActiveTool, Editor } from "../../types";
 import { cn } from "@/lib/utils";
 import { BsBorderWidth } from "react-icons/bs";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
 interface ToolbarProps {
   editor: Editor | undefined;
@@ -83,6 +84,38 @@ export default function Toolbar({
             className={cn(activeTool === "stroke-width" && "bg-gray-100")}
           >
             <BsBorderWidth className="size-4" />
+          </Button>
+        </Hint>
+      </div>
+
+      <div className="flex items-center h-full justify-center">
+        <Hint
+          label="Bring Foward"
+          side="bottom"
+          sideOffset={5}
+        >
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={() => editor?.bringForward()}
+          >
+            <ArrowUp className="size-4" />
+          </Button>
+        </Hint>
+      </div>
+
+      <div className="flex items-center h-full justify-center">
+        <Hint
+          label="Send Backward"
+          side="bottom"
+          sideOffset={5}
+        >
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={() => editor?.sendBackward()}
+          >
+            <ArrowDown className="size-4" />
           </Button>
         </Hint>
       </div>
