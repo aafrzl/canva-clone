@@ -4,16 +4,17 @@ import { fabric } from "fabric";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ActiveTool, selectedDependentTools } from "../../types";
 import { useEditor } from "../hooks/use-editor";
+import FillColorSidebar from "./fill-color-sidebar";
 import Footer from "./footer";
 import Navbar from "./navbar";
+import OpacitySidebar from "./opacity-sidebar";
 import ShapeSidebar from "./shape-sidebar";
 import Sidebar from "./sidebar";
-import Toolbar from "./toolbar";
-import FillColorSidebar from "./fill-color-sidebar";
 import StrokeColorSidebar from "./stroke-color-sidebar";
 import StrokeWidthSidebar from "./stroke-width-sidebar";
-import OpacitySidebar from "./opacity-sidebar";
+import Toolbar from "./toolbar";
 import TextSidebar from "./text-sidebar";
+import FontSidebar from "./font-sidebar";
 
 export default function Editor() {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
@@ -103,6 +104,11 @@ export default function Editor() {
           onChangeActiveTool={onChangeActiveTool}
         />
         <TextSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <FontSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}

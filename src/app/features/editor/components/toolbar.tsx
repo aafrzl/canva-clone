@@ -1,7 +1,7 @@
 import Hint from "@/components/hint";
 import { Button } from "@/components/ui/button";
 import { cn, isTextType } from "@/lib/utils";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, ChevronUp } from "lucide-react";
 import { BsBorderWidth } from "react-icons/bs";
 import { RxTransparencyGrid } from "react-icons/rx";
 import { ActiveTool, Editor } from "../../types";
@@ -19,6 +19,7 @@ export default function Toolbar({
 }: ToolbarProps) {
   const fillColor = editor?.getActiveFillColor();
   const strokeColor = editor?.getActiveStrokeColor();
+  const fontFamily = editor?.getActiveFontFamily();
 
   const selectedObjectTypes = editor?.selectedObjects[0]?.type;
   const isText = isTextType(selectedObjectTypes);
@@ -31,6 +32,31 @@ export default function Toolbar({
 
   return (
     <div className="shrink-0 bg-white border-b h-14 w-full flex items-center overflow-x-auto z-[49] p-2 gap-x-2">
+      <div className="flex items-center h-full justify-center">
+        <Hint
+          label="Font"
+          side="bottom"
+          sideOffset={5}
+        >
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => onChangeActiveTool("font")}
+            className={cn(
+              "w-full px-2 text-sm rounded-xl",
+              activeTool === "font" && "bg-gray-100"
+            )}
+          >
+            <span className="max-w-[100px] truncate">{fontFamily}</span>
+            {activeTool === "font" ? (
+              <ChevronDown className="size-4 ml-1" />
+            ) : (
+              <ChevronUp className="size-4 ml-1" />
+            )}
+          </Button>
+        </Hint>
+      </div>
+
       <div className="flex items-center h-full justify-center">
         <Hint
           label="Fill Color"

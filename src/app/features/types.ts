@@ -2,6 +2,50 @@ import { fabric } from "fabric";
 import { ITextOptions } from "fabric/fabric-impl";
 import * as material from "material-colors";
 
+export const fonts = [
+  // Sans-serif fonts
+  "Arial",
+  "Helvetica",
+  "Helvetica Neue",
+  "Calibri",
+  "Noto Sans",
+  "Roboto",
+  "Verdana",
+  "Tahoma",
+  "Trebuchet MS",
+  "Segoe UI",
+  "Open Sans",
+  "Gill Sans",
+  "Geneva",
+
+  // Serif fonts
+  "Times New Roman",
+  "Times",
+  "Georgia",
+  "Palatino",
+  "Baskerville",
+  "Cambria",
+
+  // Monospace fonts
+  "Courier",
+  "Courier New",
+  "Consolas",
+  "Monaco",
+  "Lucida Console",
+  "Menlo",
+
+  // Cursive fonts
+  "Comic Sans MS",
+  "Apple Chancery",
+  "Bradley Hand",
+
+  // Fantasy fonts
+  "Impact",
+  "Luminari",
+  "Marker Felt",
+  "Papyrus",
+];
+
 export interface EditorHookProps {
   clearSelectionCallback: () => void;
 }
@@ -125,16 +169,19 @@ export type BuildEditorProps = {
   strokeWidth: number;
   strokeDashArray: number[];
   selectedObjects: fabric.Object[];
+  fontFamily: string;
   setFillColor: (value: string) => void;
   setStrokeColor: (value: string) => void;
   setStrokeWidth: (value: number) => void;
   setStrokeDashArray: (value: number[]) => void;
+  setFontFamily: (value: string) => void;
 };
 
 export interface Editor {
   changeOpacity: (value: number) => void;
   bringForward: () => void;
   sendBackward: () => void;
+  changeFontFamily: (value: string) => void;
   changeFillColor: (value: string) => void;
   changeStrokeColor: (value: string) => void;
   changeStrokeWidth: (value: number) => void;
@@ -147,6 +194,7 @@ export interface Editor {
   addInverseTriangle: () => void;
   addDiamond: () => void;
   canvas: fabric.Canvas;
+  getActiveFontFamily: () => string;
   getActiveOpacity: () => number;
   getActiveStrokeDashArray: () => number[];
   getActiveFillColor: () => string;
