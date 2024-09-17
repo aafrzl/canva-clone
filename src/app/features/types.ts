@@ -102,13 +102,13 @@ export type ActiveTool =
   | "ai";
 
 //Define shape options
-export const FILL_COLOR = "rgba(210,215,211,1)";
-export const TEXT_COLOR = "rgba(0,0,0,1)";
+export const FILL_COLOR = "rgba(0,0,0,1)";
 export const STROKE_COLOR = "rgba(0,0,0,1)";
 export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
 export const FONT_FAMILY = "Arial";
 export const FONT_SIZE = 32;
+export const FONT_WEIGHT = 500;
 
 export const CIRCLE_OPTIONS = {
   radius: 150,
@@ -123,7 +123,7 @@ export const TEXT_OPTIONS = {
   type: "text",
   left: 100,
   top: 100,
-  fill: TEXT_COLOR,
+  fill: FILL_COLOR,
   fontSize: FONT_SIZE,
   width: 600,
   fontFamily: FONT_FAMILY,
@@ -170,23 +170,33 @@ export type BuildEditorProps = {
   strokeDashArray: number[];
   selectedObjects: fabric.Object[];
   fontFamily: string;
+  setStrokeDashArray: (value: number[]) => void;
   setFillColor: (value: string) => void;
   setStrokeColor: (value: string) => void;
   setStrokeWidth: (value: number) => void;
-  setStrokeDashArray: (value: number[]) => void;
   setFontFamily: (value: string) => void;
 };
 
 export interface Editor {
+  addText: (value: string, options?: ITextOptions) => void;
+  getActiveTextAlign: () => string;
+  getActiveFontUnderline: () => boolean;
+  getActiveFontLinethrough: () => boolean;
+  getActiveFontStyle: () => string;
+  getActiveOpacity: () => number;
   changeOpacity: (value: number) => void;
   bringForward: () => void;
   sendBackward: () => void;
+  changeTextAlign: (value: string) => void;
+  changeFontUnderline: (value: boolean) => void;
+  changeFontLinethrough: (value: boolean) => void;
+  changeFontStyle: (value: string) => void;
+  changeFontWeight: (value: number) => void;
   changeFontFamily: (value: string) => void;
-  changeFillColor: (value: string) => void;
   changeStrokeColor: (value: string) => void;
   changeStrokeWidth: (value: number) => void;
+  changeFillColor: (value: string) => void;
   changeStrokeDashArray: (value: number[]) => void;
-  addText: (value: string, options?: ITextOptions) => void;
   addCircle: () => void;
   addRectangleSoft: () => void;
   addRectangle: () => void;
@@ -194,11 +204,11 @@ export interface Editor {
   addInverseTriangle: () => void;
   addDiamond: () => void;
   canvas: fabric.Canvas;
+  getActiveFontWeight: () => number;
   getActiveFontFamily: () => string;
-  getActiveOpacity: () => number;
-  getActiveStrokeDashArray: () => number[];
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
+  getActiveStrokeDashArray: () => number[];
   selectedObjects: fabric.Object[];
 }

@@ -16,7 +16,7 @@ import Toolbar from "./toolbar";
 import TextSidebar from "./text-sidebar";
 import FontSidebar from "./font-sidebar";
 
-export default function Editor() {
+export const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
 
   const onChangeActiveTool = useCallback(
@@ -26,11 +26,11 @@ export default function Editor() {
       }
 
       if (tool === "draw") {
-        // TODO: Enable drawing mode
+        //TODO: Enable drawing mode
       }
 
       if (activeTool === "draw") {
-        // TODO: Disable drawing mode
+        //TODO: Disable drawing mode
       }
 
       setActiveTool(tool);
@@ -63,7 +63,7 @@ export default function Editor() {
     });
 
     return () => {
-      canvas.dispose(); // Clean up the canvas
+      canvas.dispose(); // Clean up fabric canvas
     };
   }, [init]);
 
@@ -118,6 +118,7 @@ export default function Editor() {
             editor={editor}
             activeTool={activeTool}
             onChangeActiveTool={onChangeActiveTool}
+            key={JSON.stringify(editor?.canvas.getActiveObject())}
           />
           <div
             className="flex-1 h-[calc(100%-124px)] bg-muted"
@@ -130,4 +131,4 @@ export default function Editor() {
       </div>
     </div>
   );
-}
+};
