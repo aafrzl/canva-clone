@@ -331,6 +331,8 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  toggleTextCase: (value: boolean) => void;
+  getActiveTextCase: () => boolean;
   deleteObject: () => void;
   addText: (value: string, options?: ITextOptions) => void;
   getActiveTextAlign: () => string;

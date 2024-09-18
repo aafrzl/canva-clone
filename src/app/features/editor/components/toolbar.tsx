@@ -8,6 +8,7 @@ import {
   AlignRight,
   ArrowDown,
   ArrowUp,
+  CaseUpper,
   ChevronDown,
   Trash,
 } from "lucide-react";
@@ -37,6 +38,7 @@ export default function Toolbar({
   const initialFontUnderline = editor?.getActiveFontUnderline();
   const initialTextAlign = editor?.getActiveTextAlign();
   const initialFontSize = editor?.getActiveFontSize() || FONT_SIZE;
+  const initialTextUppercase = editor?.getActiveTextCase();
 
   const initialFontWeight = editor?.getActiveFontWeight() || FONT_WEIGHT;
   const [properties, setProperties] = useState({
@@ -49,11 +51,24 @@ export default function Toolbar({
     fontUnderline: initialFontUnderline,
     textAlign: initialTextAlign,
     fontSize: initialFontSize,
+    textUppercase: initialTextUppercase,
   });
 
   const selectedObject = editor?.selectedObjects[0];
   const selectedObjectTypes = editor?.selectedObjects[0]?.type;
   const isText = isTextType(selectedObjectTypes);
+
+  const toggleTextCase = () => {
+    if (!selectedObject) return;
+
+    const newValue = properties.textUppercase ? false : true;
+
+    editor?.toggleTextCase(newValue);
+    setProperties((current) => ({
+      ...current,
+      textUppercase: newValue,
+    }));
+  };
 
   const onChangeFontSize = (value: number) => {
     if (!selectedObject) return;
@@ -380,6 +395,25 @@ export default function Toolbar({
               )}
             >
               <AlignJustify className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
+      {isText && (
+        <div className="flex items-center h-full justify-center">
+          <Hint
+            label="Uppercase"
+            side="bottom"
+            sideOffset={5}
+          >
+            <Button
+              onClick={toggleTextCase}
+              size={"icon"}
+              variant={"ghost"}
+              className={cn(properties.textUppercase && "bg-gray-100")}
+            >
+              <CaseUpper className="size-4" />
             </Button>
           </Hint>
         </div>
