@@ -184,6 +184,8 @@ export interface Editor {
   getActiveFontLinethrough: () => boolean;
   getActiveFontStyle: () => string;
   getActiveOpacity: () => number;
+  getActiveFontSize: () => number;
+  changeFontSize: (value: number) => void;
   changeOpacity: (value: number) => void;
   bringForward: () => void;
   sendBackward: () => void;
