@@ -57,6 +57,13 @@ const buildEditor = ({
   };
 
   return {
+    deleteObject: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.remove(object);
+      });
+
+      canvas.renderAll();
+    },
     addText: (value, options) => {
       const object = new fabric.Textbox(value, {
         ...TEXT_OPTIONS,
@@ -80,7 +87,7 @@ const buildEditor = ({
       const selectedObject = selectedObjects[0];
 
       if (!selectedObject) return FONT_SIZE;
-      
+
       // @ts-ignore
       const value = selectedObject.get("fontSize") || FONT_SIZE;
 

@@ -1,2 +1,2 @@
-TODO: Implement Delete Object Button
-TODO: Add more font family from Google Fonts
+TODO: INTEGRATE WITH HONOJS
+TODO: SIDEBAR MENU SELECT IMAGE (INTEGRATE WITH UNSPLASH API)

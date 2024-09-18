@@ -9,6 +9,7 @@ import {
   ArrowDown,
   ArrowUp,
   ChevronDown,
+  Trash,
 } from "lucide-react";
 import { useState } from "react";
 import { BsBorderWidth } from "react-icons/bs";
@@ -429,6 +430,22 @@ export default function Toolbar({
             className={cn(activeTool === "opacity" && "bg-gray-100")}
           >
             <RxTransparencyGrid className="size-4" />
+          </Button>
+        </Hint>
+      </div>
+
+      <div className="flex items-center h-full justify-center">
+        <Hint
+          label="Delete object"
+          side="bottom"
+          sideOffset={5}
+        >
+          <Button
+            onClick={() => editor?.deleteObject()}
+            size={"icon"}
+            variant={"ghost"}
+          >
+            <Trash className="size-4 stroke-destructive" />
           </Button>
         </Hint>
       </div>
