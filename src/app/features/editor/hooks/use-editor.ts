@@ -57,28 +57,6 @@ const buildEditor = ({
   };
 
   return {
-    toggleTextCase: (value: boolean) => {
-      canvas.getActiveObjects().forEach((object) => {
-        if (isTextType(object.type)){
-          // @ts-ignore
-          const text = object.text;
-          // @ts-ignore
-          object.text = value ? text.toUpperCase() : text.toLowerCase();
-        }
-      })
-
-      canvas.requestRenderAll();
-    },
-    getActiveTextCase: () => {
-      const selectedObject = selectedObjects[0];
-
-      if (!selectedObject) return false;
-
-      // @ts-ignore
-      const value = selectedObject.text === selectedObject.text.toUpperCase();
-
-      return value as boolean;
-    },
     deleteObject: () => {
       canvas.getActiveObjects().forEach((object) => {
         canvas.remove(object);
