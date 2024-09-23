@@ -7,6 +7,7 @@ import { useGetImages } from "../../images/api/use-get-images";
 import { Loader, TriangleAlertIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { UploadButton } from "@/lib/uploadthing";
 
 interface ImageSidebarProps {
   editor: Editor | undefined;
@@ -36,6 +37,26 @@ export default function ImageSidebar({
         title="Images"
         description="Add images to your design"
       />
+      <div className="p-4 border-b">
+        <UploadButton
+          appearance={{
+            button: "w-full text-sm font-medium",
+            allowedContent: "hidden",
+          }}
+          content={{
+            button: "Upload Image",
+          }}
+          endpoint="imageUploader"
+          onClientUploadComplete={(res) => {
+            editor?.addImage(res[0].url);
+          }}
+          onUploadError={(error: Error) => {
+            // Do something with the error.
+            alert(`ERROR! ${error.message}`);
+          }}
+        />
+      </div>
+
       {isLoading && (
         <div className="flex items-center justify-center flex-1">
           <div className="inline-flex gap-x-2 items-center text-muted-foreground">
