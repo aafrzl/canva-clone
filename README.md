@@ -1,5 +1,3 @@
-TODO: UPLOAD IMAGE (UPLOADTHING)
-TODO: IMAGE FILTER TOOL
 TODO: Clipboard (Copy, Paste)
 TODO: Drawing Tool
 TODO: Zoom in and zoom out function

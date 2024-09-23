@@ -17,7 +17,7 @@ import {
   TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
 } from "../../types";
-import { isTextType } from "@/lib/utils";
+import { createFilter, isTextType } from "@/lib/utils";
 import { useCallback, useMemo, useState } from "react";
 import { useAutoresize } from "./use-autoresize";
 import { useCanvasEvents } from "./use-canvas-events";
@@ -57,17 +57,36 @@ const buildEditor = ({
   };
 
   return {
+    changeFilterImage: (value: string) => {
+      const objects = canvas.getActiveObjects();
+      objects.forEach((object) => {
+        if (object.type === "image") {
+          const imageObject = object as fabric.Image;
+
+          const effect = createFilter(value);
+          imageObject.filters = effect ? [effect] : [];
+          imageObject.applyFilters();
+          canvas.renderAll();
+        }
+      });
+    },
     addImage: (url: string) => {
-      fabric.Image.fromURL(url, (image) => {
-        const workspace = getWorkspace();
+      fabric.Image.fromURL(
+        url,
+        (image) => {
+          const workspace = getWorkspace();
 
-        if (!workspace) return;
+          if (!workspace) return;
 
-        image.scaleToWidth(workspace?.width || 0);
-        image.scaleToHeight(workspace?.height || 0);
+          image.scaleToWidth(workspace?.width || 0);
+          image.scaleToHeight(workspace?.height || 0);
 
-        addToCanvas(image);
-      })
+          addToCanvas(image);
+        },
+        {
+          crossOrigin: "anonymous",
+        }
+      );
     },
     deleteObject: () => {
       canvas.getActiveObjects().forEach((object) => {

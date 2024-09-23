@@ -2,6 +2,32 @@ import { fabric } from "fabric";
 import { ITextOptions } from "fabric/fabric-impl";
 import * as material from "material-colors";
 
+export const filters = [
+  "none",
+  "polaroid",
+  "sepia",
+  "kodachrome",
+  "contrast",
+  "brightness",
+  "greyscale",
+  "brownie",
+  "vintage",
+  "technicolor",
+  "pixelate",
+  "invert",
+  "blur",
+  "sharpen",
+  "emboss",
+  "removecolor",
+  "blacknwhite",
+  "vibrance",
+  "blendcolor",
+  "huerotate",
+  "resize",
+  "saturation",
+  "gamma",
+];
+
 export const fonts = [
   // Default browser fonts
   "Arial",
@@ -331,6 +357,7 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  changeFilterImage: (url: string) => void;
   addImage: (url: string) => void;
   deleteObject: () => void;
   addText: (value: string, options?: ITextOptions) => void;

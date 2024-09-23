@@ -15,6 +15,7 @@ import { useState } from "react";
 import { BsBorderWidth } from "react-icons/bs";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { RxTransparencyGrid } from "react-icons/rx";
+import { TbColorFilter } from "react-icons/tb";
 import { ActiveTool, Editor, FONT_SIZE, FONT_WEIGHT } from "../../types";
 import FontSizeInput from "./font-size-input";
 
@@ -152,6 +153,25 @@ export default function Toolbar({
                   backgroundColor: properties.fillColor,
                 }}
               />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
+      {isImage && (
+        <div className="flex items-center h-full justify-center">
+          <Hint
+            label="Filters"
+            side="bottom"
+            sideOffset={5}
+          >
+            <Button
+              onClick={() => onChangeActiveTool("filter")}
+              size={"icon"}
+              variant={"ghost"}
+              className={cn(activeTool === "filter" && "bg-gray-100")}
+            >
+              <TbColorFilter className="size-4" />
             </Button>
           </Hint>
         </div>
