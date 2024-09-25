@@ -24,6 +24,7 @@ import { useCanvasEvents } from "./use-canvas-events";
 import { useClipboard } from "./use-clipboard";
 
 const buildEditor = ({
+  autoZoom,
   copy,
   paste,
   canvas,
@@ -60,6 +61,28 @@ const buildEditor = ({
   };
 
   return {
+    autoZoom,
+    getWorkspace,
+    zoomIn: () => {
+      let zoomRatio = canvas.getZoom();
+      zoomRatio += 0.05;
+      const center = canvas.getCenter();
+
+      canvas.zoomToPoint(
+        new fabric.Point(center.left, center.top),
+        zoomRatio > 1 ? 1 : zoomRatio
+      );
+    },
+    zoomOut: () => {
+      let zoomRatio = canvas.getZoom();
+      zoomRatio -= 0.05;
+      const center = canvas.getCenter();
+
+      canvas.zoomToPoint(
+        new fabric.Point(center.left, center.top),
+        zoomRatio < 0.2 ? 0.2 : zoomRatio // limit zoom out
+      );
+    },
     enableDrawingMode: () => {
       canvas.discardActiveObject();
       canvas.renderAll();
@@ -469,7 +492,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
   const { copy, paste } = useClipboard({ canvas });
 
-  useAutoresize({
+  const { autoZoom } = useAutoresize({
     canvas,
     container,
   });
@@ -497,11 +520,13 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
         setStrokeDashArray,
         fontFamily,
         setFontFamily,
+        autoZoom,
       });
     }
 
     return undefined;
   }, [
+    autoZoom,
     canvas,
     copy,
     paste,

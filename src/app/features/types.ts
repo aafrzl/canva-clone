@@ -342,6 +342,7 @@ export const DIAMOND_OPTIONS = {
 };
 
 export type BuildEditorProps = {
+  autoZoom: () => void;
   copy: () => void;
   paste: () => void;
   canvas: fabric.Canvas;
@@ -359,6 +360,10 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  autoZoom: () => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
+  getWorkspace: () => fabric.Object | undefined;
   enableDrawingMode: () => void;
   disableDrawingMode: () => void;
   onCopy: () => void;

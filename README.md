@@ -1,4 +1,3 @@
-TODO: Zoom in and zoom out function
 TODO: History (undo, Redo)
 TODO: Hotkeys
 TODO: Export and Import Design
