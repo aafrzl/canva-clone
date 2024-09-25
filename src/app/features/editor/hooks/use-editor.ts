@@ -21,7 +21,7 @@ import { createFilter, isTextType } from "@/lib/utils";
 import { useCallback, useMemo, useState } from "react";
 import { useAutoresize } from "./use-autoresize";
 import { useCanvasEvents } from "./use-canvas-events";
-import { useCliboard } from "./use-clipboard";
+import { useClipboard } from "./use-clipboard";
 
 const buildEditor = ({
   copy,
@@ -467,7 +467,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
 
-  const { copy, paste } = useCliboard({ canvas });
+  const { copy, paste } = useClipboard({ canvas });
 
   useAutoresize({
     canvas,

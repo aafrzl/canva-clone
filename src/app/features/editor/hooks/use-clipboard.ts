@@ -6,7 +6,7 @@ interface UseClipboardProps {
   canvas: fabric.Canvas | null;
 }
 
-export const useCliboard = ({ canvas }: UseClipboardProps) => {
+export const useClipboard = ({ canvas }: UseClipboardProps) => {
   const clipboard = useRef<any>(null);
 
   const copy = useCallback(() => {
