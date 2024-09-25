@@ -1,4 +1,3 @@
-TODO: Clipboard (Copy, Paste)
 TODO: Drawing Tool
 TODO: Zoom in and zoom out function
 TODO: History (undo, Redo)

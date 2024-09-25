@@ -21,8 +21,11 @@ import { createFilter, isTextType } from "@/lib/utils";
 import { useCallback, useMemo, useState } from "react";
 import { useAutoresize } from "./use-autoresize";
 import { useCanvasEvents } from "./use-canvas-events";
+import { useCliboard } from "./use-clipboard";
 
 const buildEditor = ({
+  copy,
+  paste,
   canvas,
   fillColor,
   fontFamily,
@@ -57,6 +60,8 @@ const buildEditor = ({
   };
 
   return {
+    onCopy: () => copy(),
+    onPaste: () => paste(),
     changeFilterImage: (value: string) => {
       const objects = canvas.getActiveObjects();
       objects.forEach((object) => {
@@ -449,6 +454,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
 
+  const { copy, paste } = useCliboard({ canvas });
+
   useAutoresize({
     canvas,
     container,
@@ -463,6 +470,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
+        copy,
+        paste,
         canvas,
         fillColor,
         strokeColor,
@@ -481,15 +490,13 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     return undefined;
   }, [
     canvas,
+    copy,
+    paste,
     fillColor,
     strokeColor,
     strokeWidth,
-    setFillColor,
-    setStrokeColor,
-    setStrokeWidth,
-    selectedObjects,
-    setStrokeDashArray,
     strokeDashArray,
+    selectedObjects,
     fontFamily,
   ]);
 
