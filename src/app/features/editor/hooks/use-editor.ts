@@ -60,6 +60,16 @@ const buildEditor = ({
   };
 
   return {
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.renderAll();
+      canvas.isDrawingMode = true;
+      canvas.freeDrawingBrush.width = strokeWidth;
+      canvas.freeDrawingBrush.color = fillColor;
+    },
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
+    },
     onCopy: () => copy(),
     onPaste: () => paste(),
     changeFilterImage: (value: string) => {
@@ -235,6 +245,7 @@ const buildEditor = ({
       canvas.getActiveObjects().forEach((object) => {
         object.set({ strokeWidth: value });
       });
+      canvas.freeDrawingBrush.width = strokeWidth;
       canvas.renderAll();
     },
     changeStrokeDashArray: (value: number[]) => {
@@ -255,6 +266,8 @@ const buildEditor = ({
 
         object.set({ stroke: value });
       });
+
+      canvas.freeDrawingBrush.color = strokeColor;
       canvas.renderAll();
     },
     addCircle: () => {

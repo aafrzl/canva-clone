@@ -1,6 +1,7 @@
 import {
   ImageIcon,
   LayoutTemplate,
+  PencilIcon,
   Settings,
   Shapes,
   SparklesIcon,
@@ -44,6 +45,12 @@ export default function Sidebar({
           label="Shapes"
           isActive={activeTool === "shapes"}
           onClick={() => onChangeActiveTool("shapes")}
+        />
+        <SidebarItem
+          icon={PencilIcon}
+          label="Drawing Tool"
+          isActive={activeTool === "draw"}
+          onClick={() => onChangeActiveTool("draw")}
         />
         <SidebarItem
           icon={SparklesIcon}
