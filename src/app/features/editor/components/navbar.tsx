@@ -19,15 +19,17 @@ import {
 import { BsCloudCheck } from "react-icons/bs";
 import { CiFileOn } from "react-icons/ci";
 import Logo from "./logo";
-import { ActiveTool } from "../../types";
+import { ActiveTool, Editor } from "../../types";
 import { cn } from "@/lib/utils";
 
 interface NavbarProps {
+  editor: Editor | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
 export default function Navbar({
+  editor,
   activeTool,
   onChangeActiveTool,
 }: NavbarProps) {
@@ -89,8 +91,8 @@ export default function Navbar({
           <Button
             variant={"ghost"}
             size={"icon"}
-            onClick={() => {}} // TODO: Add some functionality later
-            className=""
+            onClick={() => editor?.onUndo()}
+            disabled={!editor?.canUndo()}
           >
             <Undo2 className="size-4" />
           </Button>
@@ -103,8 +105,8 @@ export default function Navbar({
           <Button
             variant={"ghost"}
             size={"icon"}
-            onClick={() => {}} // TODO: Add some functionality later
-            className=""
+            onClick={() => editor?.onRedo()}
+            disabled={!editor?.canRedo()}
           >
             <Redo2 className="size-4" />
           </Button>

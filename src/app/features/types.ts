@@ -2,6 +2,17 @@ import { fabric } from "fabric";
 import { ITextOptions } from "fabric/fabric-impl";
 import * as material from "material-colors";
 
+export const JSON_KEYS = [
+  "name",
+  "gradientAngle",
+  "selectable",
+  "hasControls",
+  "linkData",
+  "editable",
+  "extensionType",
+  "extension",
+];
+
 export const filters = [
   "none",
   "polaroid",
@@ -342,6 +353,11 @@ export const DIAMOND_OPTIONS = {
 };
 
 export type BuildEditorProps = {
+  save: (skip?: boolean) => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
   autoZoom: () => void;
   copy: () => void;
   paste: () => void;
@@ -360,6 +376,12 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  changeSize: (size: { width: number; height: number }) => void;
+  changeBackground: (value: string) => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
+  onUndo: () => void;
+  onRedo: () => void;
   autoZoom: () => void;
   zoomIn: () => void;
   zoomOut: () => void;

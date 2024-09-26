@@ -18,6 +18,7 @@ import FontSidebar from "./font-sidebar";
 import ImageSidebar from "./image-sidebar";
 import FilterSidebar from "./filter-sidebar";
 import DrawSidebar from "./draw-sidebar";
+import SettingSidebar from "./setting-sidebar";
 
 export const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
@@ -73,6 +74,7 @@ export const Editor = () => {
   return (
     <div className="h-full flex flex-col">
       <Navbar
+        editor={editor}
         activeTool={activeTool}
         onChangeActiveTool={onChangeActiveTool}
       />
@@ -127,6 +129,11 @@ export const Editor = () => {
           onChangeActiveTool={onChangeActiveTool}
         />
         <DrawSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <SettingSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
