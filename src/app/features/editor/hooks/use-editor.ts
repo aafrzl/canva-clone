@@ -18,7 +18,12 @@ import {
   TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
 } from "../../types";
-import { createFilter, isTextType } from "@/lib/utils";
+import {
+  createFilter,
+  downloadFile,
+  isTextType,
+  transformText,
+} from "@/lib/utils";
 import { useCallback, useMemo, useState } from "react";
 import { useAutoresize } from "./use-autoresize";
 import { useCanvasEvents } from "./use-canvas-events";
@@ -48,6 +53,69 @@ const buildEditor = ({
   strokeDashArray,
   setStrokeDashArray,
 }: BuildEditorProps): Editor => {
+  const generateOptions = () => {
+    const { width, height, left, top } = getWorkspace() as fabric.Rect;
+
+    return {
+      name: "Image",
+      format: "png",
+      quality: 1,
+      width,
+      height,
+      left,
+      top,
+    };
+  };
+
+  const savePng = () => {
+    const options = generateOptions();
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "png");
+    autoZoom();
+  };
+
+  const saveJpg = () => {
+    const options = generateOptions();
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "jpg");
+    autoZoom();
+  };
+
+  const saveSvg = () => {
+    const options = generateOptions();
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "svg");
+    autoZoom();
+  };
+
+  const saveJson = async () => {
+    const dataUrl = canvas.toJSON(JSON_KEYS);
+
+    await transformText(dataUrl.objects);
+    const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(dataUrl, null, "\t")
+    )}`;
+
+    downloadFile(fileString, "json");
+  };
+
+  const loadJson = (json: string) => {
+    const data = JSON.parse(json);
+
+    canvas.loadFromJSON(data, () => {
+      canvas.renderAll();
+    });
+  };
+
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === "clip");
   };
@@ -69,6 +137,11 @@ const buildEditor = ({
   };
 
   return {
+    savePng,
+    saveJpg,
+    saveSvg,
+    saveJson,
+    loadJson,
     canUndo,
     canRedo,
     autoZoom,

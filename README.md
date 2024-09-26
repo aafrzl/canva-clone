@@ -1,4 +1,3 @@
-TODO: Hotkeys
 TODO: Export and Import Design
 
 (Optional)

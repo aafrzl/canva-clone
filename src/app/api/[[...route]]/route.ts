@@ -7,13 +7,7 @@ import images from "./images";
 
 const app = new Hono().basePath("/api");
 
-app.get("/hello", (c) => {
-  return c.json({
-    message: "Hello Next.js!",
-  });
-});
-
-const routes = app.route("/images", images)
+const routes = app.route("/images", images);
 
 export const GET = handle(app);
 export const POST = handle(app);

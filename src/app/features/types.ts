@@ -376,6 +376,11 @@ export type BuildEditorProps = {
 };
 
 export interface Editor {
+  savePng: () => void;
+  saveJson: () => void;
+  saveSvg: () => void;
+  saveJpg: () => void;
+  loadJson: (json: string) => void;
   changeSize: (size: { width: number; height: number }) => void;
   changeBackground: (value: string) => void;
   canUndo: () => boolean;

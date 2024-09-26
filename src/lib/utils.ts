@@ -3,6 +3,31 @@ import { clsx, type ClassValue } from "clsx";
 import { RGBColor } from "react-color";
 import { twMerge } from "tailwind-merge";
 import { fabric } from "fabric";
+import { v4 as uuidv4 } from "uuid";
+
+export function downloadFile(file: string, type: string) {
+  const anchorElement = document.createElement("a");
+
+  anchorElement.href = file;
+  anchorElement.download = `${uuidv4()}.${type}`;
+  document.body.appendChild(anchorElement);
+  anchorElement.click();
+  anchorElement.remove();
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function transformText(objects: any) {
+  if (!objects) return;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  objects.forEach((item: any) => {
+    if (item.objects) {
+      transformText(item.objects);
+    } else {
+      item.type === "text" && (item.type = "i-text");
+    }
+  });
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
