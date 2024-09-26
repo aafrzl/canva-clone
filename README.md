@@ -1,4 +1,3 @@
-TODO: Settings (Change canvas background color, Change canvas size) nanti di save ke history JSON biar bisa di undo
 TODO: Hotkeys
 TODO: Export and Import Design
 
