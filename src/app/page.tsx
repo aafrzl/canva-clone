@@ -1,10 +1,11 @@
-import { Button } from "@/components/ui/button";
+import { auth } from "@/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
   return (
     <div className="flex flex-col justify-center items-center gap-2 h-screen container mx-auto">
-      Hello World!
-      <Button>Click me</Button>
+      <p>{JSON.stringify(session, null, 2)}</p>
     </div>
   );
 }
