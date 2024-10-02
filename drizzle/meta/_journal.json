@@ -8,6 +8,13 @@
       "when": 1727714054223,
       "tag": "0000_special_cobalt_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1727879449324,
+      "tag": "0001_flowery_zaran",
+      "breakpoints": true
     }
   ]
 }

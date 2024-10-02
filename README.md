@@ -1,4 +1,3 @@
-TODO: Setup signIn/signup Credentials (Email/Password)
 TODO: Implement Authjs with Hono add some middleware to protect API routes
 TODO: Session Provider & User Button on Navbar
 TODO: Layouting Homepage Dashboard
