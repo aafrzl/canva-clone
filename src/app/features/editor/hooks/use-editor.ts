@@ -30,6 +30,7 @@ import { useCanvasEvents } from "./use-canvas-events";
 import { useClipboard } from "./use-clipboard";
 import { useHistory } from "./use-history";
 import { useHotKeys } from "./use-hotkeys";
+import { useWindowsEvents } from "./use-windows-events";
 
 const buildEditor = ({
   save,
@@ -599,6 +600,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     canvas,
     container,
   });
+
+  useWindowsEvents();
 
   const { save, canUndo, canRedo, undo, redo, setHistoryIndex, canvasHistory } =
     useHistory({
