@@ -1,8 +1,9 @@
-import { Editor } from '@/app/features/editor/components/editor'
-import React from 'react'
+import { protectPage } from "@/app/features/auth/utils";
+import { Editor } from "@/app/features/editor/components/editor";
+import React from "react";
 
-export default function EditorProjectId() {
-  return (
-    <Editor />
-  )
+export default async function EditorProjectId() {
+  await protectPage();
+
+  return <Editor />;
 }
