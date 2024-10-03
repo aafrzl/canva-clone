@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { LucideIcon } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import React from "react";
 
 interface Props {
