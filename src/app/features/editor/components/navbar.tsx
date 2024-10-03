@@ -22,6 +22,7 @@ import Logo from "./logo";
 import { ActiveTool, Editor } from "../../types";
 import { useFilePicker } from "use-file-picker";
 import { cn } from "@/lib/utils";
+import UserButton from "../../auth/components/user-button";
 
 interface NavbarProps {
   editor: Editor | undefined;
@@ -202,6 +203,7 @@ export default function Navbar({
             </DropdownMenuContent>
           </DropdownMenu>
           {/* TODO: Add user button component */}
+          <UserButton />
         </div>
       </div>
     </nav>
