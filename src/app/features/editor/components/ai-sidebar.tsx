@@ -36,6 +36,7 @@ export default function AiSidebarbar({
       {
         onSuccess: ({ data }) => {
           editor?.addImage(data);
+          setValue("");
         },
       }
     );

@@ -1,4 +1,5 @@
 "use client";
+import { useCreateProject } from "@/app/features/projects/api/use-create-project";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -7,6 +8,23 @@ import React from "react";
 
 export default function Banner() {
   const router = useRouter();
+  const mutation = useCreateProject();
+
+  const handleCreateProject = () => {
+    mutation.mutate(
+      {
+        name: "Untitled Project",
+        json: "",
+        width: 900,
+        height: 1200,
+      },
+      {
+        onSuccess: ({ data }) => {
+          router.push(`/editor/${data.id}`);
+        },
+      }
+    );
+  };
 
   return (
     <BackgroundGradientAnimation
@@ -30,7 +48,7 @@ export default function Banner() {
         <Button
           variant={"secondary"}
           className="w-[200px] rounded-xl"
-          onClick={() => router.push(`/editor/123`)}
+          onClick={handleCreateProject}
         >
           <span className="font-medium">Start Creating Design</span>
           <ArrowRight className="size-4 ml-2 shrink-0" />
