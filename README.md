@@ -1,5 +1,7 @@
-TODO: Schema Database for projects and API Routes for create project
 TODO: Fetch existing projects from database
+TODO: Implement auto save feature
+TODO: Render projects in the dashboard with infinite load
+TODO: Implement Duplicate & Delete a Project feature
 
 ISSUE/BUGS:
 
