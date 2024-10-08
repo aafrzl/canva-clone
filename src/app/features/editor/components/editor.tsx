@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ActiveTool, selectedDependentTools } from "../../types";
 import { useEditor } from "../hooks/use-editor";
 import FillColorSidebar from "./fill-color-sidebar";
+import debounce from "lodash.debounce";
 import Footer from "./footer";
 import Navbar from "./navbar";
 import OpacitySidebar from "./opacity-sidebar";
@@ -21,6 +22,7 @@ import DrawSidebar from "./draw-sidebar";
 import SettingSidebar from "./setting-sidebar";
 import AiSidebarbar from "./ai-sidebar";
 import { ResponseType } from "../../projects/api/use-get-project";
+import { useUpdateProject } from "../../projects/api/use-update-project";
 
 interface EditorProps {
   initialData: ResponseType["data"];
@@ -29,6 +31,17 @@ interface EditorProps {
 export const Editor = ({ initialData }: EditorProps) => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
 
+  const { mutate } = useUpdateProject(initialData.id);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedSave = useCallback(
+    debounce((values: { json: string; height: number; width: number }) => {
+      console.log("saving...", values);
+      mutate(values);
+    }, 1000),
+    [mutate]
+  );
+
   const onClearSelection = useCallback(() => {
     if (selectedDependentTools.includes(activeTool)) {
       setActiveTool("select");
@@ -36,7 +49,11 @@ export const Editor = ({ initialData }: EditorProps) => {
   }, [activeTool]);
 
   const { init, editor } = useEditor({
+    defaultState: initialData.json,
+    defaultWidth: initialData.width,
+    defaultHeight: initialData.height,
     clearSelectionCallback: onClearSelection,
+    saveCallback: debouncedSave,
   });
 
   const onChangeActiveTool = useCallback(
@@ -80,6 +97,7 @@ export const Editor = ({ initialData }: EditorProps) => {
   return (
     <div className="h-full flex flex-col">
       <Navbar
+        id={initialData.id}
         editor={editor}
         activeTool={activeTool}
         onChangeActiveTool={onChangeActiveTool}
