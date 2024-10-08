@@ -20,8 +20,13 @@ import FilterSidebar from "./filter-sidebar";
 import DrawSidebar from "./draw-sidebar";
 import SettingSidebar from "./setting-sidebar";
 import AiSidebarbar from "./ai-sidebar";
+import { ResponseType } from "../../projects/api/use-get-project";
 
-export const Editor = () => {
+interface EditorProps {
+  initialData: ResponseType["data"];
+}
+
+export const Editor = ({ initialData }: EditorProps) => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
 
   const onClearSelection = useCallback(() => {
