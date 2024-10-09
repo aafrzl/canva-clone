@@ -1,5 +1,3 @@
-TODO: Implement auto save feature
-TODO: Render projects in the dashboard with infinite load
 TODO: Implement Duplicate & Delete a Project feature
 
 ISSUE/BUGS:
