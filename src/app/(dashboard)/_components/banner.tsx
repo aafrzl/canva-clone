@@ -38,7 +38,7 @@ export default function Banner() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center gap-4 text-center text-2xl md:text-4xl lg:text-6xl">
+      <div className="flex flex-col items-center gap-4 text-center text-2xl md:text-4xl xl:text-6xl">
         <div className="space-y-1">
           <h1 className="bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20">
             Visualize your ideas with our <br />
