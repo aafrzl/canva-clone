@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { useDuplicateProject } from "@/app/features/projects/api/use-duplicate-project";
 import { useDeleteProject } from "@/app/features/projects/api/use-delete-project";
 import { useConfirm } from "@/hooks/use-confirm";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProjectsSection() {
   const router = useRouter();
@@ -59,10 +60,31 @@ export default function ProjectsSection() {
           </div>
           <h3 className="font-semibold text-lg">Recent Projects</h3>
         </div>
-        <div className="flex items-center gap-x-2 justify-center h-32">
-          <Loader className="animate-spin" />
-          <p className="text-sm text-muted">Loading...</p>
-        </div>
+        <Table>
+          <TableBody>
+            {Array(5)
+              .fill(null)
+              .map((_, rowIndex) => (
+                <TableRow
+                  key={rowIndex}
+                  className="hover:bg-transparent"
+                >
+                  <TableCell className="md:table-cell">
+                    <Skeleton className="h-6 w-full" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <Skeleton className="h-6 w-full" />
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <Skeleton className="h-6 w-full" />
+                  </TableCell>
+                  <TableCell className="md:table-cell">
+                    <Skeleton className="h-6 w-full" />
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
       </div>
     );
   }
