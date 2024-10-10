@@ -21,9 +21,31 @@ import { useGetProjects } from "@/app/features/projects/api/use-get-projects";
 import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useDuplicateProject } from "@/app/features/projects/api/use-duplicate-project";
+import { useDeleteProject } from "@/app/features/projects/api/use-delete-project";
+import { useConfirm } from "@/hooks/use-confirm";
 
 export default function ProjectsSection() {
   const router = useRouter();
+  const { ConfrimationDialog, confirm } = useConfirm(
+    "Are you sure?",
+    "This action cannot be undone. Are you sure you want to continue?"
+  );
+
+  const duplicateMutation = useDuplicateProject();
+  const deleteMutation = useDeleteProject();
+
+  const onCopy = (id: string) => {
+    duplicateMutation.mutate({ id });
+  };
+
+  const onDelete = async (id: string) => {
+    const ok = await confirm();
+
+    if (ok) {
+      deleteMutation.mutate({ id });
+    }
+  };
 
   const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useGetProjects();
@@ -83,6 +105,7 @@ export default function ProjectsSection() {
 
   return (
     <div className="space-y-4">
+      <ConfrimationDialog />
       <div className="inline-flex gap-x-2 items-center">
         <div className="p-2 bg-blue-500 rounded-full">
           <Files className="size-5 text-background" />
@@ -94,11 +117,11 @@ export default function ProjectsSection() {
           {data.pages.map((group, i) => (
             <Fragment key={i}>
               {group.data.map((project) => (
-                <TableRow
-                  key={project.id}
-                  onClick={() => router.push(`/editor/${project.id}`)}
-                >
-                  <TableCell className="font-medium md:table-cell cursor-pointer">
+                <TableRow key={project.id}>
+                  <TableCell
+                    onClick={() => router.push(`/editor/${project.id}`)}
+                    className="font-medium md:table-cell cursor-pointer"
+                  >
                     {project.name}
                   </TableCell>
                   <TableCell className="hidden md:table-cell cursor-pointer">
@@ -124,7 +147,7 @@ export default function ProjectsSection() {
                         className="w-48"
                       >
                         <DropdownMenuItem
-                          onClick={() => {}}
+                          onClick={() => onCopy(project.id)}
                           disabled={false}
                           className="h-10 cursor-pointer"
                         >
@@ -132,7 +155,7 @@ export default function ProjectsSection() {
                           <span>Make a copy</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => {}}
+                          onClick={() => onDelete(project.id)}
                           disabled={false}
                           className="h-10 cursor-pointer"
                         >
