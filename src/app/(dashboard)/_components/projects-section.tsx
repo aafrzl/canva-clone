@@ -108,7 +108,7 @@ export default function ProjectsSection() {
     );
   }
 
-  if (!data.pages.length) {
+  if (!data.pages.length || data.pages[0].data.length === 0) {
     return (
       <div className="space-y-4">
         <div className="inline-flex gap-x-2 items-center">

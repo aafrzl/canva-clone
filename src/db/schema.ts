@@ -105,6 +105,7 @@ export const projects = pgTable("project", {
   width: integer("width").notNull(),
   isTemplate: boolean("isTemplate"),
   isPro: boolean("isPro"),
+  thumbnailUrl: text("thumbnailUrl"),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
   updatedAt: timestamp("updatedAt", { mode: "date" }).notNull(),
 });
