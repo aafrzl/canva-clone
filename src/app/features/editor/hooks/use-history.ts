@@ -61,7 +61,6 @@ export const useHistory = ({ canvas, saveCallback }: useHistoryProps) => {
       });
     }
   }, [canUndo, canvas, historyIndex]);
-
   const redo = useCallback(() => {
     if (canRedo()) {
       skipSave.current = true;
