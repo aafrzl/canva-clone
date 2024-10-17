@@ -8,6 +8,7 @@ import { ActiveTool, Editor } from "../../types";
 import ToolSidebarClose from "./tool-sidebar-close";
 import ToolSidebarHeader from "./tool-sidebar-header";
 import { Loader, SparklesIcon } from "lucide-react";
+import { usePaywall } from "../../subscriptions/hooks/use-paywall";
 
 interface AiSidebarbarProps {
   editor: Editor | undefined;
@@ -20,6 +21,7 @@ export default function AiSidebarbar({
   activeTool,
   onChangeActiveTool,
 }: AiSidebarbarProps) {
+  const { shouldBlock, triggerPaywall } = usePaywall();
   const mutation = useGenerateImage();
 
   const [value, setValue] = useState("");
@@ -30,6 +32,11 @@ export default function AiSidebarbar({
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (shouldBlock) {
+      triggerPaywall();
+      return;
+    }
 
     mutation.mutate(
       { prompt: value },

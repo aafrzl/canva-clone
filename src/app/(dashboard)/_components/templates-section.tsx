@@ -10,8 +10,10 @@ import { LayoutPanelTop, RefreshCcw, TriangleAlert } from "lucide-react";
 import TemplateCard from "./template-card";
 import { useRouter } from "next/navigation";
 import { useCreateProject } from "@/app/features/projects/api/use-create-project";
+import { usePaywall } from "@/app/features/subscriptions/hooks/use-paywall";
 
 export default function TemplatesSection() {
+  const { shouldBlock, triggerPaywall } = usePaywall();
   const router = useRouter();
   const mutation = useCreateProject();
 
@@ -25,6 +27,11 @@ export default function TemplatesSection() {
   };
 
   const onClickTemplate = (template: ResponseTemplatesType["data"][0]) => {
+    if (template.isPro && shouldBlock) {
+      triggerPaywall();
+      return;
+    }
+
     mutation.mutate(
       {
         name: `${template.name} project`,

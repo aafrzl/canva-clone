@@ -10,6 +10,7 @@ import { ActiveTool, Editor } from "../../types";
 import ToolSidebarClose from "./tool-sidebar-close";
 import ToolSidebarHeader from "./tool-sidebar-header";
 import { useConfirm } from "@/hooks/use-confirm";
+import { usePaywall } from "../../subscriptions/hooks/use-paywall";
 
 interface TemplatesSidebarProps {
   editor: Editor | undefined;
@@ -22,6 +23,7 @@ export default function TemplatesSidebar({
   activeTool,
   onChangeActiveTool,
 }: TemplatesSidebarProps) {
+  const { shouldBlock, triggerPaywall } = usePaywall();
   const { ConfrimationDialog, confirm } = useConfirm(
     "Are you sure?",
     "This will clear your current design. Cannot be undone."
@@ -37,6 +39,11 @@ export default function TemplatesSidebar({
   };
 
   const onClick = async (template: ResponseTemplatesType["data"][0]) => {
+    if (template.isPro && shouldBlock) {
+      triggerPaywall();
+      return;
+    }
+
     const isConfirmed = await confirm();
 
     if (isConfirmed) {
