@@ -1,2 +1,2 @@
-TODO: Create Subscription UI
-TODO: Implement Subscription API (backend) & Integrate with Payment Gateway (Stripe atau Midtrans)
+TODO: Implement billing portal stripe integration
+TODO: Add modal failed payment and success payment

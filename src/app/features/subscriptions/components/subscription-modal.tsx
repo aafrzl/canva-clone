@@ -13,9 +13,11 @@ import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { LuBadgeCheck } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
-import { CrownIcon } from "lucide-react";
+import { CrownIcon, Loader } from "lucide-react";
+import { useCheckout } from "../api/use-checkout";
 
 export default function SubscriptionModal() {
+  const mutation = useCheckout();
   const { isOpen, onClose } = useSubscriptionModal();
 
   return (
@@ -56,12 +58,16 @@ export default function SubscriptionModal() {
         </ul>
         <DialogFooter className="mt-4 pt-2">
           <Button
-            onClick={() => {}}
-            disabled={false}
+            onClick={() => mutation.mutate()}
+            disabled={mutation.isPending}
             size={"lg"}
             className="w-full"
           >
-            <CrownIcon className="size-5 fill-yellow-500 text-yellow-500 mr-2" />
+            {mutation.isPending ? (
+              <Loader className="mr-2 size-5 animate-spin" />
+            ) : (
+              <CrownIcon className="size-5 fill-yellow-500 text-yellow-500 mr-2" />
+            )}
             Upgrade to premium
           </Button>
         </DialogFooter>

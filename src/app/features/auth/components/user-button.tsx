@@ -8,10 +8,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { CreditCardIcon, Loader, LogOutIcon } from "lucide-react";
+import { CreditCardIcon, CrownIcon, Loader, LogOutIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import { usePaywall } from "../../subscriptions/hooks/use-paywall";
 
 export default function UserButton() {
+  const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
   const session = useSession();
 
   if (session.status === "loading")
@@ -24,7 +26,14 @@ export default function UserButton() {
 
   return (
     <DropdownMenu modal={false}>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="outline-none relative">
+        {!shouldBlock && !isLoading && (
+          <div className="absolute -left-1 -top-1 z-10 flex items-center justify-center">
+            <div className="rounded-full bg-white flex items-center justify-center p-1 drop-shadow-md">
+              <CrownIcon className="size-3 fill-yellow-500 text-yellow-500" />
+            </div>
+          </div>
+        )}
         <Avatar>
           <AvatarImage
             alt={name || ""}

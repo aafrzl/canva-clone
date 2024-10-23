@@ -6,30 +6,44 @@ import {
   CreditCardIcon,
   CrownIcon,
   HomeIcon,
+  Loader,
   MessageCircleQuestion,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import SidebarItem from "./sidebar-item";
+import { usePaywall } from "@/app/features/subscriptions/hooks/use-paywall";
+import { useCheckout } from "@/app/features/subscriptions/api/use-checkout";
 
 export default function SidebarRoutes() {
+  const mutation = useCheckout();
+  const { shouldBlock, isLoading } = usePaywall();
   const pathname = usePathname();
 
   return (
     <div className="flex flex-col gap-4 flex-1">
-      <div className="px-4">
-        <Button
-          onClick={() => {}}
-          className="w-full rounded-xl border-none transition hover:opacity-75 hover:bg-white"
-          variant={"outline"}
-          size={"lg"}
-        >
-          <CrownIcon className="mr-2 size-4 fill-yellow-500 text-yellow-500" />
-          <span className="font-medium">Upgrade to Pro Plan</span>
-        </Button>
-      </div>
-      <div className="px-3">
-        <Separator />
-      </div>
+      {shouldBlock && !isLoading && (
+        <>
+          <div className="px-3">
+            <Button
+              onClick={() => mutation.mutate()}
+              disabled={mutation.isPending}
+              className="w-full rounded-xl border-none transition hover:opacity-75 hover:bg-white"
+              variant={"outline"}
+              size={"lg"}
+            >
+              {mutation.isPending ? (
+                <Loader className="size-4 animate-spin mr-2" />
+              ) : (
+                <CrownIcon className="mr-2 size-4 fill-yellow-500 text-yellow-500" />
+              )}
+              <span className="font-medium">Upgrade to Pro Plan</span>
+            </Button>
+          </div>
+          <div className="px-3">
+            <Separator />
+          </div>
+        </>
+      )}
       <ul className="flex flex-col gap-1 px-3">
         <SidebarItem
           href="/"

@@ -118,3 +118,19 @@ export const projectRelations = relations(projects, ({ one }) => ({
 }));
 
 export const projectInsertSchema = createInsertSchema(projects);
+
+export const subscriptions = pgTable("subscription", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, {
+      onDelete: "cascade",
+    }),
+  subscriptionId: text("subscriptionId").notNull(),
+  status: text("status").notNull(),
+  currentPeriodEnd: timestamp("currentPeriodEnd", { mode: "date" }),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
+  updatedAt: timestamp("updatedAt", { mode: "date" }).notNull(),
+});

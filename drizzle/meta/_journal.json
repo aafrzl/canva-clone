@@ -36,6 +36,34 @@
       "when": 1729005935944,
       "tag": "0004_old_hardball",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1729693922254,
+      "tag": "0005_oval_bishop",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1729695924489,
+      "tag": "0006_friendly_kat_farrell",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1729696099583,
+      "tag": "0007_funny_lockheed",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1729696304919,
+      "tag": "0008_dazzling_layla_miller",
+      "breakpoints": true
     }
   ]
 }
