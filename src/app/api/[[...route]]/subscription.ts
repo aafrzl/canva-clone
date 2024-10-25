@@ -8,6 +8,30 @@ import { Hono } from "hono";
 import Stripe from "stripe";
 
 const app = new Hono()
+  .post("/billing", verifyAuth(), async (c) => {
+    const auth = c.get("authUser");
+
+    if (!auth.token?.id) return c.json({ error: "Unauthorized" }, 401);
+
+    const [subscription] = await db
+      .select()
+      .from(subscriptions)
+      .where(eq(subscriptions.userId, auth.token.id));
+
+    if (!subscription) return c.json({ error: "No subscription found" }, 404);
+
+    console.log("Get subscription data", subscription);
+
+    const session = await stripe.billingPortal.sessions.create({
+      customer: subscription.customerId,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
+    });
+
+    if (!session.url)
+      return c.json({ error: "Failed to create billing portal session" }, 500);
+
+    return c.json({ data: session.url });
+  })
   .post("/webhook", async (c) => {
     const body = await c.req.text();
     const signature = c.req.header("Stripe-Signature") as string;
@@ -39,6 +63,7 @@ const app = new Hono()
         status: subscription.status,
         userId: session.metadata.userId,
         subscriptionId: subscription.id,
+        customerId: subscription.customer as string,
         currentPeriodEnd: new Date(subscription.current_period_end * 1000),
         createdAt: new Date(),
         updatedAt: new Date(),

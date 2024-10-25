@@ -13,11 +13,22 @@ import { usePathname } from "next/navigation";
 import SidebarItem from "./sidebar-item";
 import { usePaywall } from "@/app/features/subscriptions/hooks/use-paywall";
 import { useCheckout } from "@/app/features/subscriptions/api/use-checkout";
+import { useBilling } from "@/app/features/subscriptions/api/use-billing";
 
 export default function SidebarRoutes() {
   const mutation = useCheckout();
-  const { shouldBlock, isLoading } = usePaywall();
+  const mutationBilling = useBilling();
+  const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
   const pathname = usePathname();
+
+  const handleBilling = () => {
+    if (shouldBlock) {
+      triggerPaywall();
+      return;
+    }
+
+    mutationBilling.mutate();
+  };
 
   return (
     <div className="flex flex-col gap-4 flex-1">
@@ -60,7 +71,7 @@ export default function SidebarRoutes() {
           href={pathname}
           icon={CreditCardIcon}
           label="Billing"
-          onClick={() => {}}
+          onClick={handleBilling}
         />
         <SidebarItem
           href="mailto:afrizal.mufriz25@gmail.com"

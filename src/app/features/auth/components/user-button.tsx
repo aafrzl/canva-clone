@@ -11,10 +11,21 @@ import {
 import { CreditCardIcon, CrownIcon, Loader, LogOutIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { usePaywall } from "../../subscriptions/hooks/use-paywall";
+import { useBilling } from "../../subscriptions/api/use-billing";
 
 export default function UserButton() {
   const { shouldBlock, triggerPaywall, isLoading } = usePaywall();
   const session = useSession();
+  const mutation = useBilling();
+
+  const handleBilling = () => {
+    if (shouldBlock) {
+      triggerPaywall();
+      return;
+    }
+
+    mutation.mutate();
+  };
 
   if (session.status === "loading")
     return <Loader className="size-4 animate-spin text-muted-foreground" />;
@@ -49,11 +60,15 @@ export default function UserButton() {
         className="w-60"
       >
         <DropdownMenuItem
-          disabled={false}
-          onClick={() => {}}
+          disabled={mutation.isPending}
+          onClick={handleBilling}
           className="h-10 cursor-pointer"
         >
-          <CreditCardIcon className="size-4 mr-2" />
+          {mutation.isPending ? (
+            <Loader className="size-4 animate-spin mr-2" />
+          ) : (
+            <CreditCardIcon className="size-4 mr-2" />
+          )}
           <span>Billing</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

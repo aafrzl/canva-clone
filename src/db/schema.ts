@@ -129,6 +129,7 @@ export const subscriptions = pgTable("subscription", {
       onDelete: "cascade",
     }),
   subscriptionId: text("subscriptionId").notNull(),
+  customerId: text("customerId").notNull(),
   status: text("status").notNull(),
   currentPeriodEnd: timestamp("currentPeriodEnd", { mode: "date" }),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull(),
