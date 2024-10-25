@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { Modals } from "@/components/modals";
+import { SubscriptionAlert } from "@/components/subscription-alert";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default async function RootLayout({
       >
         <body className={cn("antialiased", inter.className)}>
           <Providers>
+            <SubscriptionAlert />
             <Modals />
             {children}
             <Toaster />
