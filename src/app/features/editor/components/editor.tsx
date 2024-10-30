@@ -37,7 +37,6 @@ export const Editor = ({ initialData }: EditorProps) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSave = useCallback(
     debounce((values: { json: string; height: number; width: number }) => {
-      console.log("saving...", values);
       mutate(values);
     }, 1000),
     [mutate]

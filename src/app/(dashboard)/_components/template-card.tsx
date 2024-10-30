@@ -43,6 +43,7 @@ export default function TemplateCard({
           fill
           src={imageSrc}
           alt={title}
+          sizes="calc(100vw - 2rem)"
           className="object-cover transition transform group-hover:scale-105"
         />
         {isPro && (

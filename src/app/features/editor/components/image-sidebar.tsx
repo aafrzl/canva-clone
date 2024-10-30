@@ -89,6 +89,7 @@ export default function ImageSidebar({
                       src={image.urls.small}
                       alt={image.alt_description || "Unsplash image"}
                       fill
+                      sizes="calc(100vw - 2rem)"
                       className="object-cover"
                     />
                     <Link
