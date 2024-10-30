@@ -1,1 +1,1 @@
-TODO: Add modal failed payment and success payment
+TODO: Contributor user template dashboard

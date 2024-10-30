@@ -8,23 +8,29 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import { useMutationState } from "@tanstack/react-query";
 import {
   ChevronDownIcon,
   DownloadCloud,
   Loader,
   MousePointerClickIcon,
+  PencilIcon,
   Redo2,
   Undo2,
 } from "lucide-react";
-import { useMutationState } from "@tanstack/react-query";
+import { useState } from "react";
 import { BsCloudCheck, BsCloudSlash } from "react-icons/bs";
 import { CiFileOn } from "react-icons/ci";
-import Logo from "./logo";
-import { ActiveTool, Editor } from "../../types";
 import { useFilePicker } from "use-file-picker";
-import { cn } from "@/lib/utils";
 import UserButton from "../../auth/components/user-button";
+import { useGetProject } from "../../projects/api/use-get-project";
+import { useUpdateProject } from "../../projects/api/use-update-project";
+import { ActiveTool, Editor } from "../../types";
+import Logo from "./logo";
 
 interface NavbarProps {
   id: string;
@@ -39,6 +45,13 @@ export default function Navbar({
   activeTool,
   onChangeActiveTool,
 }: NavbarProps) {
+  const { data: dataProject, isLoading: isLoadingProject } = useGetProject(id);
+
+  const mutationUpdateProject = useUpdateProject(id);
+
+  const [projectName, setProjectName] = useState(dataProject?.name);
+  const [isEditing, setIsEditing] = useState(false);
+
   const data = useMutationState({
     filters: {
       mutationKey: ["project", { id }],
@@ -172,6 +185,34 @@ export default function Navbar({
         )}
 
         <div className="ml-auto flex items-center gap-x-4">
+          {isLoadingProject && <Skeleton className="w-40 h-8" />}
+          {dataProject?.name && !isLoadingProject && (
+            <>
+              {isEditing ? (
+                <Input
+                  value={projectName || ""}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  onBlur={() => {
+                    if (projectName !== dataProject?.name) {
+                      mutationUpdateProject.mutate({
+                        name: projectName,
+                      });
+                    }
+                    setIsEditing(false);
+                  }}
+                  className="w-40"
+                />
+              ) : (
+                <span
+                  onClick={() => setIsEditing(true)}
+                  className="cursor-pointer group inline-flex items-center gap-x-1"
+                >
+                  <span className="text-sm">{projectName}</span>
+                  <PencilIcon className="size-4 text-muted-foreground opacity-0 group-hover:opacity-100" />
+                </span>
+              )}
+            </>
+          )}
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button
@@ -236,7 +277,6 @@ export default function Navbar({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/* TODO: Add user button component */}
           <UserButton />
         </div>
       </div>

@@ -5,6 +5,7 @@ import {
   EllipsisVerticalIcon,
   Files,
   Loader,
+  PencilIcon,
   SearchXIcon,
   TrashIcon,
   TriangleAlertIcon,
@@ -17,16 +18,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
-import { useGetProjects } from "@/app/features/projects/api/use-get-projects";
-import { Fragment } from "react";
+import {
+  ResponseType,
+  useGetProjects,
+} from "@/app/features/projects/api/use-get-projects";
+import { Fragment, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useDuplicateProject } from "@/app/features/projects/api/use-duplicate-project";
 import { useDeleteProject } from "@/app/features/projects/api/use-delete-project";
 import { useConfirm } from "@/hooks/use-confirm";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { useUpdateProject } from "@/app/features/projects/api/use-update-project";
 
 export default function ProjectsSection() {
+  const [isEditing, setIsEditing] = useState("");
+  const [projectName, setProjectName] = useState("");
+
   const router = useRouter();
   const { ConfrimationDialog, confirm } = useConfirm(
     "Are you sure?",
@@ -35,6 +44,26 @@ export default function ProjectsSection() {
 
   const duplicateMutation = useDuplicateProject();
   const deleteMutation = useDeleteProject();
+  const updatedMutation = useUpdateProject(isEditing);
+
+  const handleNameBlur = () => {
+    if (projectName.trim() && isEditing) {
+      updatedMutation.mutate(
+        { name: projectName },
+        {
+          onSuccess: () => {
+            setIsEditing("");
+            setProjectName("");
+          },
+        }
+      );
+    }
+  };
+
+  const handleEditClick = (project: ResponseType["data"][0]) => {
+    setIsEditing(project.id);
+    setProjectName(project.name || "");
+  };
 
   const onCopy = (id: string) => {
     duplicateMutation.mutate({ id });
@@ -138,57 +167,83 @@ export default function ProjectsSection() {
         <TableBody>
           {data.pages.map((group, i) => (
             <Fragment key={i}>
-              {group.data.map((project) => (
-                <TableRow key={project.id}>
-                  <TableCell
-                    onClick={() => router.push(`/editor/${project.id}`)}
-                    className="font-medium md:table-cell cursor-pointer"
+              {group.data.map((project) => {
+                return (
+                  <TableRow
+                    key={project.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(`/editor/${project.id}`);
+                    }}
                   >
-                    {project.name}
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell cursor-pointer">
-                    {project.width} x {project.height} px
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell cursor-pointer">
-                    {formatDistanceToNow(new Date(project.updatedAt), {
-                      addSuffix: true,
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu modal={false}>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          variant={"ghost"}
-                          size={"icon"}
+                    <TableCell
+                      onClick={(e) => e.stopPropagation()}
+                      className="font-medium md:table-cell cursor-pointer"
+                    >
+                      {isEditing !== project.id ? (
+                        <span
+                          onClick={() => handleEditClick(project)}
+                          className="cursor-pointer group inline-flex items-center gap-x-1"
                         >
-                          <EllipsisVerticalIcon className="size-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent
-                        align="end"
-                        className="w-48"
-                      >
-                        <DropdownMenuItem
-                          onClick={() => onCopy(project.id)}
-                          disabled={false}
-                          className="h-10 cursor-pointer"
+                          <span className="text-sm">{project.name}</span>
+                          <PencilIcon className="size-4 text-muted-foreground opacity-0 group-hover:opacity-100" />
+                        </span>
+                      ) : (
+                        <Input
+                          value={projectName}
+                          onChange={(e) => setProjectName(e.target.value)}
+                          onBlur={handleNameBlur}
+                          className="w-40 h-8"
+                        />
+                      )}
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell cursor-pointer">
+                      {project.width} x {project.height} px
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell cursor-pointer">
+                      {formatDistanceToNow(new Date(project.updatedAt), {
+                        addSuffix: true,
+                      })}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu modal={false}>
+                        <DropdownMenuTrigger
+                          asChild
+                          onClick={(e) => e.stopPropagation()}
                         >
-                          <CopyIcon className="size-4 mr-2" />
-                          <span>Make a copy</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => onDelete(project.id)}
-                          disabled={false}
-                          className="h-10 cursor-pointer"
+                          <Button
+                            variant={"ghost"}
+                            size={"icon"}
+                          >
+                            <EllipsisVerticalIcon className="size-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          align="end"
+                          className="w-48"
                         >
-                          <TrashIcon className="size-4 mr-2" />
-                          <span>Delete</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
+                          <DropdownMenuItem
+                            onClick={() => onCopy(project.id)}
+                            disabled={false}
+                            className="h-10 cursor-pointer"
+                          >
+                            <CopyIcon className="size-4 mr-2" />
+                            <span>Make a copy</span>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => onDelete(project.id)}
+                            disabled={false}
+                            className="h-10 cursor-pointer"
+                          >
+                            <TrashIcon className="size-4 mr-2" />
+                            <span>Delete</span>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </Fragment>
           ))}
         </TableBody>
