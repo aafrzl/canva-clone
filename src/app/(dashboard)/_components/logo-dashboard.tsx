@@ -12,7 +12,7 @@ export default function LogoDashboard() {
             fill
           />
         </div>
-        <h1 className="text-xl font-bold">Canva Clone</h1>
+        <h1 className="text-xl font-bold">Designify</h1>
       </div>
     </Link>
   );

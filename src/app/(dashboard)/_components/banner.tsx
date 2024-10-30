@@ -42,7 +42,7 @@ export default function Banner() {
         <div className="space-y-1">
           <h1 className="bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20">
             Visualize your ideas with our <br />
-            <span className="font-bold">Canva Clone</span>
+            <span className="font-bold">Canvas Editor</span>
           </h1>
         </div>
         <Button
