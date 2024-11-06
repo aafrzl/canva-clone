@@ -1,19 +1,20 @@
 "use client";
 
+import { useBilling } from "@/app/features/subscriptions/api/use-billing";
+import { useCheckout } from "@/app/features/subscriptions/api/use-checkout";
+import { usePaywall } from "@/app/features/subscriptions/hooks/use-paywall";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   CreditCardIcon,
   CrownIcon,
   HomeIcon,
+  Lightbulb,
   Loader,
-  MessageCircleQuestion,
+  MessageCircleQuestion
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import SidebarItem from "./sidebar-item";
-import { usePaywall } from "@/app/features/subscriptions/hooks/use-paywall";
-import { useCheckout } from "@/app/features/subscriptions/api/use-checkout";
-import { useBilling } from "@/app/features/subscriptions/api/use-billing";
 
 export default function SidebarRoutes() {
   const mutation = useCheckout();
@@ -61,6 +62,12 @@ export default function SidebarRoutes() {
           icon={HomeIcon}
           label="Home"
           isActive={pathname === "/"}
+        />
+        <SidebarItem
+          href="/creators"
+          icon={Lightbulb}
+          label="Creators"
+          isActive={pathname === "/creators"}
         />
       </ul>
       <div className="px-3">

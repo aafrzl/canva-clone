@@ -2,7 +2,7 @@ import { db } from "@/db/drizzle";
 import { projectInsertSchema, projects } from "@/db/schema";
 import { verifyAuth } from "@hono/auth-js";
 import { zValidator } from "@hono/zod-validator";
-import { and, asc, desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 
@@ -23,7 +23,7 @@ const app = new Hono()
         .where(eq(projects.isTemplate, true))
         .limit(limit)
         .offset((page - 1) * limit)
-        .orderBy(asc(projects.isPro), desc(projects.updatedAt));
+        .orderBy(desc(projects.isPro), desc(projects.updatedAt));
 
       return c.json({
         data,
@@ -101,7 +101,12 @@ const app = new Hono()
       const data = await db
         .select()
         .from(projects)
-        .where(eq(projects.userId, auth.token.id))
+        .where(
+          and(
+            eq(projects.userId, auth.token.id),
+            eq(projects.isTemplate, false)
+          )
+        )
         .limit(limit)
         .offset((page - 1) * limit)
         .orderBy(desc(projects.updatedAt));
@@ -171,6 +176,46 @@ const app = new Hono()
     }
   )
   .post(
+    "/template",
+    verifyAuth(),
+    zValidator(
+      "json",
+      projectInsertSchema.pick({
+        name: true,
+        json: true,
+        height: true,
+        width: true,
+        thumbnailUrl: true,
+      })
+    ),
+    async (c) => {
+      const auth = c.get("authUser");
+      if (!auth.token?.id) return c.json({ error: "Unauthorized" }, 401);
+
+      const { name, json, width, height, thumbnailUrl } = c.req.valid("json");
+
+      const project = await db
+        .insert(projects)
+        .values({
+          name,
+          json,
+          height,
+          width,
+          isPro: false,
+          thumbnailUrl,
+          userId: auth.token.id,
+          isTemplate: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning();
+
+      if (!project[0]) return c.json({ error: "Something went wrong" }, 500);
+
+      return c.json({ data: project[0] });
+    }
+  )
+  .post(
     "/",
     verifyAuth(),
     zValidator(
@@ -195,6 +240,8 @@ const app = new Hono()
           json,
           height,
           width,
+          isTemplate: false,
+          isPro: false,
           userId: auth.token.id,
           createdAt: new Date(),
           updatedAt: new Date(),
