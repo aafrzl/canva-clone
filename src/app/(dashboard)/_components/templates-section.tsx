@@ -120,6 +120,7 @@ export default function TemplatesSection() {
             width={template.width}
             height={template.height}
             isPro={template.isPro}
+            isTemplateUser={false}
           />
         ))}
       </div>

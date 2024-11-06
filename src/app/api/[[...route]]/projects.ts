@@ -30,6 +30,35 @@ const app = new Hono()
       });
     }
   )
+  .get(
+    "/templates-user",
+    verifyAuth(),
+    zValidator(
+      "query",
+      z.object({ page: z.coerce.number(), limit: z.coerce.number() })
+    ),
+    async (c) => {
+      const auth = c.get("authUser");
+      if (!auth.token?.id) return c.json({ error: "Unauthorized" }, 401);
+
+      const { page, limit } = c.req.valid("query");
+
+      const data = await db
+        .select()
+        .from(projects)
+        .where(
+          and(eq(projects.isTemplate, true), eq(projects.userId, auth.token.id))
+        )
+        .limit(limit)
+        .offset((page - 1) * limit)
+        .orderBy(desc(projects.updatedAt));
+
+      return c.json({
+        data,
+        nextPage: data.length === limit ? page + 1 : null,
+      });
+    }
+  )
   .delete(
     "/:id",
     verifyAuth(),

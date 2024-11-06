@@ -1,17 +1,25 @@
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { CrownIcon } from "lucide-react";
+import { CrownIcon, MoreVertical, Trash } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
 interface TemplateCardProps {
   imageSrc: string;
   title: string;
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   description: string;
   width: number;
   height: number;
   isPro: boolean | null;
+  isTemplateUser: boolean;
 }
 
 export default function TemplateCard({
@@ -23,6 +31,7 @@ export default function TemplateCard({
   width,
   height,
   isPro,
+  isTemplateUser,
 }: TemplateCardProps) {
   return (
     <button
@@ -52,15 +61,46 @@ export default function TemplateCard({
           </div>
         )}
         <div className="opacity-0 group-hover:opacity-100 transition absolute inset-0 bg-black/50 flex items-center justify-center rounded-xl backdrop-filter backdrop-blur-sm">
-          <p className="text-white font-medium">Open in editor</p>
+          {isTemplateUser ? (
+            <>
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    size={"icon"}
+                    variant={"outline"}
+                    className="absolute top-2 right-2"
+                  >
+                    <MoreVertical className="size-5 hprtext-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem
+                    onClick={() => {}} //TODO: Add functionality to delete user template
+                    className="flex items-center space-x-2"
+                  >
+                    <Trash className="size-5 text-red-500 stroke-red-500" />
+                    <span className="ml-2">Delete</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <div className="space-y-1 text-white text-center">
+                <p className="text-sm font-medium">{title}</p>
+                <p className="text-xs">{description}</p>
+              </div>
+            </>
+          ) : (
+            <p className="text-white font-medium">Open in editor</p>
+          )}
         </div>
       </div>
-      <div className="space-y-1">
-        <p className="text-sm font-medium">{title}</p>
-        <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-75 transition">
-          {description}
-        </p>
-      </div>
+      {!isTemplateUser && (
+        <div className="space-y-1">
+          <p className="text-sm font-medium">{title}</p>
+          <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-75 transition">
+            {description}
+          </p>
+        </div>
+      )}
     </button>
   );
 }
