@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UploadDropzone } from "@/lib/uploadthing";
+import { UploadButton } from "@/lib/uploadthing";
 import { Loader, UploadCloud } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -90,7 +90,7 @@ export default function CreateTemplateModal() {
             className="w-full space-y-2"
             onSubmit={onSubmit}
           >
-            <UploadDropzone
+            <UploadButton
               appearance={{
                 button: "w-full text-sm font-medium",
                 allowedContent: "hidden",
@@ -167,9 +167,10 @@ export default function CreateTemplateModal() {
               variant={"outline"}
               onClick={openFilePicker}
               type="button"
+              disabled={formState.json !== null}
             >
               <UploadCloud className="size-4 mr-2" />
-              Upload Template File
+              {formState.json ? "Template JSON Uploaded" : "Upload Template JSON"}
             </Button>
             <Button
               className="w-full"
