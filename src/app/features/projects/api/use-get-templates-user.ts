@@ -12,7 +12,7 @@ export const useGetTemplatesUser = () => {
   const query = useInfiniteQuery<ResponseTemplatesUserType, Error>({
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,
-    queryKey: ["projects"],
+    queryKey: ["templates-user"],
     queryFn: async ({ pageParam }) => {
       const response = await client.api.projects["templates-user"]["$get"]({
         query: {

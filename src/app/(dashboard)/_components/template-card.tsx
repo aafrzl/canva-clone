@@ -1,14 +1,6 @@
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { CrownIcon, MoreVertical, Trash } from "lucide-react";
+import { CrownIcon } from "lucide-react";
 import Image from "next/image";
-import React from "react";
 
 interface TemplateCardProps {
   imageSrc: string;
@@ -60,47 +52,25 @@ export default function TemplateCard({
             <CrownIcon className="size-5 text-yellow-500 fill-yellow-500" />
           </div>
         )}
-        <div className="opacity-0 group-hover:opacity-100 transition absolute inset-0 bg-black/50 flex items-center justify-center rounded-xl backdrop-filter backdrop-blur-sm">
+        <div
+          className={cn(
+            "opacity-0 group-hover:opacity-100 transition absolute inset-0 flex items-center justify-center rounded-xl backdrop-filter backdrop-blur-sm",
+            isTemplateUser ? "bg-red-500/50" : "bg-black/50"
+          )}
+        >
           {isTemplateUser ? (
-            <>
-              <DropdownMenu modal={false}>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    size={"icon"}
-                    variant={"outline"}
-                    className="absolute top-2 right-2"
-                  >
-                    <MoreVertical className="size-5 hprtext-foreground" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
-                    onClick={() => {}} //TODO: Add functionality to delete user template
-                    className="flex items-center space-x-2"
-                  >
-                    <Trash className="size-5 text-red-500 stroke-red-500" />
-                    <span className="ml-2">Delete</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <div className="space-y-1 text-white text-center">
-                <p className="text-sm font-medium">{title}</p>
-                <p className="text-xs">{description}</p>
-              </div>
-            </>
+            <p className="text-white font-medium">Delete Template</p>
           ) : (
             <p className="text-white font-medium">Open in editor</p>
           )}
         </div>
       </div>
-      {!isTemplateUser && (
-        <div className="space-y-1">
-          <p className="text-sm font-medium">{title}</p>
-          <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-75 transition">
-            {description}
-          </p>
-        </div>
-      )}
+      <div className="space-y-1">
+        <p className="text-sm font-medium">{title}</p>
+        <p className="text-xs text-muted-foreground opacity-0 group-hover:opacity-75 transition">
+          {description}
+        </p>
+      </div>
     </button>
   );
 }

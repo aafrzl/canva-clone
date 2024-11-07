@@ -26,10 +26,10 @@ export const useCreateTemplate = () => {
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("Template created successfully");
       queryClient.invalidateQueries({
-        queryKey: ["templates"],
+        queryKey: ["templates-user"],
       });
+      toast.success("Template created successfully");
     },
     onError: (error) => {
       toast.error(error.message);

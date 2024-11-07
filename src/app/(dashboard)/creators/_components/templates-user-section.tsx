@@ -1,15 +1,32 @@
 "use client";
 
+import { useDeleteTemplateUser } from "@/app/features/projects/api/use-delete-template-user";
 import { useGetTemplatesUser } from "@/app/features/projects/api/use-get-templates-user";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Files, Loader, SearchXIcon, TriangleAlert } from "lucide-react";
-import TemplateCard from "../../_components/template-card";
-import { Fragment } from "react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useConfirm } from "@/hooks/use-confirm";
+import { Files, Loader, SearchXIcon, TriangleAlert } from "lucide-react";
+import { Fragment } from "react";
+import TemplateCard from "../../_components/template-card";
 
 export default function TemplatesUserSection() {
   const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useGetTemplatesUser();
+
+  const mutation = useDeleteTemplateUser();
+
+  const { ConfrimationDialog, confirm } = useConfirm(
+    "Are you sure?",
+    "This action cannot be undone. Are you sure you want to continue?"
+  );
+
+  const onDelete = async (id: string) => {
+    const ok = await confirm();
+
+    if (ok) {
+      mutation.mutate({ id });
+    }
+  };
 
   if (status === "pending") {
     return (
@@ -73,48 +90,52 @@ export default function TemplatesUserSection() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="inline-flex gap-x-2 items-center w-full">
-        <div className="p-2 bg-blue-500 rounded-full">
-          <Files className="size-5 text-background" />
+    <Fragment>
+      <ConfrimationDialog />
+      <div className="space-y-4">
+        <div className="inline-flex gap-x-2 items-center w-full">
+          <div className="p-2 bg-blue-500 rounded-full">
+            <Files className="size-5 text-background" />
+          </div>
+          <h3 className="font-semibold text-lg">Recent Uploaded Templates</h3>
         </div>
-        <h3 className="font-semibold text-lg">Recent Uploaded Templates</h3>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 mt-4 gap-4">
-        {data.pages.map((group, i) => (
-          <Fragment key={i}>
-            {group.data.map((template) => {
-              return (
-                <TemplateCard
-                  key={template.id}
-                  title={template.name || "Untitled"}
-                  imageSrc={template.thumbnailUrl || ""}
-                  disabled={false}
-                  description={`${template.width} x ${template.height} px`}
-                  width={template.width}
-                  height={template.height}
-                  isPro={template.isPro}
-                  isTemplateUser={true}
-                />
-              );
-            })}
-          </Fragment>
-        ))}
-      </div>
-      {hasNextPage && (
-        <div className="w-full flex items-center justify-center pt-4">
-          <Button
-            variant={"outline"}
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-          >
-            {isFetchingNextPage && (
-              <Loader className="size-4 animate-spin mr-2" />
-            )}
-            {isFetchingNextPage ? "Loading..." : "Load more"}
-          </Button>
+        <div className="grid grid-cols-2 md:grid-cols-4 mt-4 gap-4">
+          {data.pages.map((group, i) => (
+            <Fragment key={i}>
+              {group.data.map((template) => {
+                return (
+                  <TemplateCard
+                    key={template.id}
+                    title={template.name || "Untitled"}
+                    imageSrc={template.thumbnailUrl || ""}
+                    disabled={false}
+                    description={`${template.width} x ${template.height} px`}
+                    width={template.width}
+                    height={template.height}
+                    isPro={template.isPro}
+                    isTemplateUser={true}
+                    onClick={() => onDelete(template.id)}
+                  />
+                );
+              })}
+            </Fragment>
+          ))}
         </div>
-      )}
-    </div>
+        {hasNextPage && (
+          <div className="w-full flex items-center justify-center pt-4">
+            <Button
+              variant={"outline"}
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
+            >
+              {isFetchingNextPage && (
+                <Loader className="size-4 animate-spin mr-2" />
+              )}
+              {isFetchingNextPage ? "Loading..." : "Load more"}
+            </Button>
+          </div>
+        )}
+      </div>
+    </Fragment>
   );
 }
